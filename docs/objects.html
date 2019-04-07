@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+   <link rel="stylesheet" href="css/default.css">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+   <script type="module">
+   hljs.initHighlightingOnLoad();</script>
+   <title>Everyday Coding</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<a class="navbar-brand" href="https://ncs.seattleu.edu/">NCS Dice</a>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+   <span class="navbar-toggler-icon"></span>
+</button>
+
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+   <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+      <a class="nav-link" href="#">Home <span class="sr-only"></span></a>
+      </li>
+      <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+         Week 2
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+         <a class="dropdown-item" href="scope.html">Scope</a>
+         <a class="dropdown-item" href="objects.html">Objects</a>
+      </div>
+      </li>
+      <li class="nav-item dropdown">
+         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Week 3
+         </a>
+         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="inheritance.html">Inheritance</a>
+            <a class="dropdown-item" href="polymorphism.html">Polymorphism</a>
+            <a class="dropdown-item" href="composition.html">Composition</a>
+         </div>
+      </li>
+   </ul>
+</div>
+</nav>
+<div class="container">
+<h1>Everyday-Coding Week 2</h1> 
+<h2>Objects</h2>
+<h3>What is an Object?</h3>
+<p>You probably thought that functions were cool. They allow us to collect a set of procedures and make a reusable thing that could work on general types of input. Well, it is possible to save further time and energy if we make objects. An object, put simply, is a set of properties and methods that are collected together. The most common example is a car. It has a bunch of properties (wheels, seats, an engine, seat belts, etc.) and it has a bunch of methods (drive, stop, honk horn, etc.). In programming it might look like this:
+<pre><code class="python">
+class Car():
+   color: str
+   horn: str
+   num_wheels: int
+   capacity: int
+   max_speed: int
+   current_speed: int
+
+   def __init__(self, color, wheels, capacity, max_speed, horn=""):
+      self.color = color
+      self.horn = horn
+      self.num_wheels = wheels
+      self.capacity = capacity
+      self.max_speed = max_speed
+      self.current_speed = 0
+
+   def speed_up(self, quantity: int) -> bool:
+      if self.current_speed >= self.max_speed:
+         return False
+      else:
+         self.current_speed += quantity
+         if self.current_speed > self.max_speed:
+            self.current_speed = self.max_speed
+         return True
+   
+   def make_noise(self):
+      if self.horn not "":
+         print(self.horn)
+</code></pre>
+</p>
+<p>Notice that by default, the color, horn, number of wheels, and so on are all variables. This means that the car class has attributes, but those attributes do not necessarily hold values. This means that each time we create a copy of this object, we can assign different attributes. How does this work? It's a little complicated but here's the process. We begin by instantiating the class:
+<pre><code class="python">
+my_car = Car('blue', 4, 4, 230, 'meow')
+</code></pre></p>
+<p>This will create an object that is based on the Car class. This means that the object will have all of the properties and methods defined by the car class. You'll notice that I pass a number of parameters to the Car class as I create (or "instantiate") the class. These parameters are given to the constructor. In Python the constructor method is called <code>__init__()</code>, which is a dunder as is usually included in a class. A good way to remember init is by thinking it stands for initialize. Whenever you create a new instance of a class (or make an object based on the class), the <code>__init__()</code> method is called automatically on whatever you pass in as you create the instance. So using the example of my_car above, the init method does this (**Note: you don't actually code this. It happens automatically. I'm giving you this to illustrate what's happening**):
+<pre><code class="python">
+# YOU WOULDN'T WRITE THIS. THIS IS JUST FOR ILLUSTRATION PURPOSES.
+def __init__(self, color='blue', wheels=4, capacity=4, 
+      max_speed=230, horn="meow"):
+   self.color = color
+   self.horn = horn
+   self.num_wheels = wheels
+   self.capacity = capacity
+   self.max_speed = max_speed
+   self.current_speed = 0
+</code></pre></p>
+<p>These parameters are then processed in the function setting the parameters of **THIS** instance of the object to particular values. 
+<pre><code class="python">
+# YOU WOULDN'T WRITE THIS. THIS IS JUST FOR ILLUSTRATION PURPOSES.
+def __init__(self, color='blue', wheels=4, capacity=4,      
+      max_speed=230, horn="meow"):
+   self.color = 'blue'
+   self.horn = 'meow'
+   self.num_wheels = 4
+   self.capacity = 4
+   self.max_speed = 230
+   self.current_speed = 0
+</code></pre>
+The variable my_car now holds a Car() object that has its properties set to the above values by the constructor.</p>
+
+<p>The cool thing about classes: I can create loads of instances without much extra work:
+<pre><code class="python">
+my_new_car = Car('yellow', 18, 1000, 900, 'beep beep')
+my_new_new_car = Car('green', 2, 1, 350, 'I\'m a motorcycle')
+</code></pre>
+Each of the new objects is constructed the moment the Python interpreter reads the line initializing it. At that moment, the <code>__init__()</code> method is called to initialize the instance of the object.</p>
+
+<h3> dot-notation & visibility & self</h3>
+<h4> dot-notation</h4>
+<p>You probably have already written Python code that uses *dot-notation*. For instance, when we want to make a string all lowercase, we simply call <code>str.lower()</code>, which is a method that returns the string with all of its characters lowercase. In this case, you're using dot-notation, which allows you to access a particular objects methods and properties. For instance, in the above example, if we wanted to access the current_speed property directly, we'd simply write <code>my_car.current_speed</code>. The first part tells us which object, and the part after the dot refers to a property. In the case of strings, every string is not only a series of characters, but it is an object (in Python). One of the methods that is part of every string is the <code>lower()</code> method, which takes the contents of the string and returns the contents in lowercase. To access that method, you simply use dot notation to call the method on the string object.</p>
+
+<p>Whenever you use object oriented programming, using something like dot-notation is vital. For instance, when you create an object and instantiate it, the way you make use of that object (it's methods and properties) is to call them through dot-notation. If you are not using object oriented programming, then dot-notation is less significant, but since in Python, everything is an object, and most things have methods and properties, and most things can be subtypable (more on that later), you use dot-notation a lot.</p> 
+
+<h4> visibility</h4>
+<p>If you have experience with a programming language like Java or C++, you probably have encountered public, private, and protected variables and methods. This denotes their visibility. Let me give you an example:
+
+<pre><code class="c">
+class Car {
+   public:
+      Cars(string color, int capacity) {
+         this.color = color;
+         this.capacity = capacity;
+      }
+
+      int get_capacity() {
+         return this.capacity;
+      }
+
+      string get_color() {
+         return this.color;
+      }
+   private:
+      string color;
+      int capacity;
+};
+
+int main() {
+   Car my_car = new Car("blue", 4);
+   cout << "The color is: " << my_car.get_color() << endl;
+   // This next line will not work because color is private.
+   cout << "The color is: " << my_car.color << endl;
+}
+</code></pre></p>
+
+<p>I suspect this isn't too difficult to understand coming from Python. The various int's and string's are just defining the type of things. The thing to pay attention to is that there are private and public methods and properties. C++ (as well as Java) enforces the visibility of these. So, I cannot directly access the Car's color property because it is a private property. Instead, I have to use the public get_color() method. This is a security feature that is quite useful, and generally speaking it is good programming practice, especially if you are building something complex, to control how properties (data) is accessed. However, Python does not enforce private or public properties and methods. Everything is public. It has become conventional for Python developers to start the names of what they consider (or would like to consider) private with a single underscore <code>_foo</code>. Likewise, if you are building a system with complex inheritence (next page), you can precede a variable or function name with two underscores. This allows you to differentiate between the method in the parent class and child classes. This will make more sense when we talk about inheritance next.</p>
+
+<h4>self</h4>
+<p>The keyword <code>self</code> often leads to a good deal of confusion in Python. If you have experience with another programming language, like javascript or C++ or Java, you may have seen the keyword <code>this</code>. Python uses <code>self</code> instead. The keyword <code>self</code> refers to this particular instance of the class. For instance, let's look at a little class:
+<pre><code class="python">
+class Shape:
+   sides: int
+   color: str
+
+   def __init__(self, color, sides): 
+      self.sides = sides
+      self.color = color
+   
+   def get_color(self):
+      return self.color
+   
+   def get_area(self):
+      return self.area
+</code></pre></p>
+<p>Notice that the class has two properties. One is the number of sides. The other is the color. Technically, these properties are in the scope of the class, but not necessarily in the scope of the methods. Also notice that each of the methods has <code>self</code> as a parameter. Basically, what's happening here is you are passing the instance of the object to each of these methods so that all of its methods and properties are accessible within each method. For instance, <code>self.sides = sides</code> means that we are assigning to the sides property of this instance of the object whatever value was passed in with the local sides parameter variable. <code>self.sides</code> is not the same variable as <code>sides</code> even though the latter's value is assigned to the former. Self is the way we donote this particular instance of the object.</p> 
+
+<h3>Conclusion</h3>
+<p>This has been a really brief introduction to objects. Next we'll begin discussing inheritence, composition, and polymorphism. These concepts are where objects really begin to show their value and their usefulness.</p>
