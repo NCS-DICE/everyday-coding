@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   <link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+   <title>Everyday Coding</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<a class="navbar-brand" href="https://ncs.seattleu.edu/">NCS Dice</a>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+   <span class="navbar-toggler-icon"></span>
+</button>
+
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+   <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+         Week 2
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+         <a class="dropdown-item" href="scope.html">Scope</a>
+         <a class="dropdown-item" href="objects.html">Objects</a>
+      </div>
+      </li>
+      <li class="nav-item dropdown">
+         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Week 3
+         </a>
+         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="inheritance.html">Inheritance</a>
+            <a class="dropdown-item" href="polymorphism.html">Polymorphism</a>
+            <a class="dropdown-item" href="composition.html">Composition</a>
+         </div>
+      </li>
+   </ul>
+</div>
+</nav>
+<div class="container">
+<h1>Everyday-Coding Week 2</h1>  
+<h2>Scope</h2>
+
+<p>One of the more challenging concepts in programming is scope. Scope refers to the context in which a particular set of instructions are being carried out. There are many levels of scope are related largely to how the computer finds things. This gets really complicated, but it is very important. I think a good way to think of it is to begin with a metaphor:</p>
+
+<p>Right now, we're in a city: Seattle (or if you're in another city, then whatever that city is). There are a lot of different spaces within that city, but everything is within the city. Some of those spaces are public and others are private. For instance, public parks are totally public. Anyone can go into these spaces, use all of the equipment, have barbecues, etc. Some of those spaces are private. For instance, Seattle also has private houses. Now while I can go into the park and use all the resources there, I couldn't go into some random person's house and use their stuff. They'd be angry. I'd probably get arrested. The person can use their own stuff, but I can't. If I want something from their house, I'd have to ask and have them give it to me.</p>
+
+<p>We might say that the park, being outside of the house, is in the global environment. The house, on the other hand, is a local environment. Anyone who lives in any house can still access the park. Only people who live in their house can access the stuff in the house unless there is some way to take the stuff out of the house.</p>
+
+<p>Scope is a little bit like this. In a program you will have "names" (functions, classes, variables, objects, etc.) in various spaces from the global space to various local spaces. If you've ever received a "Name Error" in Python, it probably means that you are trying to access a name that is not accessible in that particular space or context.</p>
+
+<p>Now applying this metaphor to coding really specifically. Consider the following code:
+
+<pre><code>
+some_number = 27
+
+def is_odd(num):
+   if num % 2 == 0:
+      return False
+   else:
+      return True
+
+if __name__ == "__main__":
+   if is_odd(some_number):
+      print("It's odd")
+   else:
+      print("It's even")
+   print(num) # This won't work will throw a Name Error
+</code></pre>
+
+
+The variable "some_number" exists in the global space. That's why I can access it in the conditional at the bottom of the program. However, <code>print(num)</code> will not work because num only exists inside of the <code>is_odd()</code> function and is not accessible outside of that function unless it is returned as output. 
+
+Variables that can be accessed from anywhere in the program are called **global variables**. Variables that can only be accessed within a class or function are called local variables and only exist within that scope. Let's look at a more complicated example:
+
+<pre><code>
+import requests
+# Constants
+BASE_URL = 'https://en.wikipedia.org/w/api.php?action=search&search=list'
+
+# functions
+def search(term: str) -> str:
+   # this resp is a local variable
+   resp = requests.get(BASE_URL + '&srsearch={}'.format(term))
+   if resp.status_code == 200:
+      return resp.text
+   else:
+      return "Error"
+
+if __name__ == '__main__':
+   print("Hello, Friend! I'm here to help you find stuff on
+      Wikipedia.")
+   search_for = input("Please enter a search term: ")
+   # this resp is a global variable but it is not the 
+   # same as the local variable of the same name within
+   # the search function.
+   resp = search(search_for)
+   if resp != "Error":
+      print("Your search was successful")
+      print(resp)
+   else:
+      print("I'm sorry. Try again later.")
+      print(resp)
+</code></pre>
+There are a few names to cover:
+
+* BASE_URL: This is a global variable. It is also a "constant." While Python doesn't enforce constants in the same way that C++ or Java does, it is conventional to name variables that are set once and never change will all capital letters. This tells future programmers that they shouldn't reset the value of this variable.
+* search(): search is the name of our function. It is declared in the global context, so it can be accessed anywhere in our program after it is declared.
+* term: This is a variable that is a parameter of search(). it is only accessible within the scope of the search function. You'll notice the funky <code>: str</code> and <code>-> str</code>. These are new features of Python. Unlike C++ and Java, Python is not strongly typed. This means that you can change the type of data a variable holds. This is generally considered bad practice, so they've added a way to give developers a hint as to what type of variable these are going to be. The <code>: str</code> means that term ought to be a string (not enforced). The <code>-> str</code> tells us that the function will return a string (again, not enforced). 
+* resp: This variable is local to <code>search()</code> and cannot be accessed outside of search. resp happens to be the object returned from the <code>requests.get()</code> method.
+* search_for: this is a string that exists in the global context, but notice that if the condition (ie. this program is being run as the main program rather than a subprocess within another program) is not satisfied the variable will never be created.
+* resp: this variable is also a string (ie. the output of <code>search_for()</code>). It is also only created if the condition passes. However, notice that this program has two variables of the same name. This is not good practice, but it does illustrate the importance of scope. The first resp is a local varible within the function. The second resp is a global variable to the program. They do not refer to the same thing or the same space in memory even though they are of the same name. The only reason I can name two variables the same thing is because they are in a different scope. If they were in the same scope, there would only be one variable, and it would be reassigned a new value. 
+
+The key to understanding scope is to consider if the named entity (variable or function) is inside of a function or class or is in the global space of the program. This is an important prerequisite to begin thinking about Objects in a serious way. On the next page, we'll talk about objects.
+<h2>Contributers</h2>
+<ul>
+   <li><a href="https://www.dylanmedina.com">Dylan Medina</a></li>
+</ul>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+</html>
