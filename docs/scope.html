@@ -7,7 +7,6 @@
    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
    <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
-   <link rel="stylesheet" href="css/default.css">
    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
    <script type="module">
    hljs.initHighlightingOnLoad();</script>
@@ -23,7 +22,7 @@
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
    <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-      <a class="nav-link" href="#">Home <span class="sr-only"></span></a>
+      <a class="nav-link" href="/">Home <span class="sr-only"></span></a>
       </li>
       <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -61,7 +60,7 @@
 
 <p>Now applying this metaphor to coding really specifically. Consider the following code:
 
-<pre><code class="Python">
+<pre><code class="python">
 some_number = 27
 
 def is_odd(num):
@@ -83,7 +82,7 @@ The variable "some_number" exists in the global space. That's why I can access i
 
 Variables that can be accessed from anywhere in the program are called **global variables**. Variables that can only be accessed within a class or function are called local variables and only exist within that scope. Let's look at a more complicated example:
 
-<pre><code>
+<pre><code class="python">
 import requests
 # Constants
 BASE_URL = 'https://en.wikipedia.org/w/api.php?action=search&search=list'
