@@ -5,9 +5,28 @@ title: Objects
 <h1>Everyday-Coding Week 2</h1> 
 <h2>Objects</h2>
 <h3>What is an Object?</h3>
-<p>You probably thought that functions were cool. They allow us to collect a set of procedures and make a reusable thing that could work on general types of input. Well, it is possible to save further time and energy if we make objects. An object, put simply, is a set of properties and methods that are collected together. The most common example is a car. It has a bunch of properties (wheels, seats, an engine, seat belts, etc.) and it has a bunch of methods (drive, stop, honk horn, etc.). In programming it might look like this:
+<p>You probably thought that functions were cool. They allow us to collect a set of procedures and make a reusable thing that could work on general types of input. Well, it is possible to save further time and energy if we make objects. An object, put simply, is a set of properties and methods that are collected together. A good way to think about it is if we use a car as an example. A car has a bunch of properties (wheels, seats, an engine, seat belts, etc.) and it has a bunch of methods (drive, stop, honk horn, etc.). In programming it might look like this:
 <pre><code class="python">
-class Car():
+class Car:
+   color 
+   horn 
+   num_wheels 
+   capacity 
+   
+   def get_capacity():
+      ...
+
+   def honk_horn():
+      ... 
+   
+   def get_color():
+      ...
+</code></pre>
+<p>The first line in the snippet above defines the class using the <code>class</code> keyword and then the class name. The name Car is arbitrary in the same way variable names are arbitrary. They cannot be reserved words in Python, but they can be any other words. It is conventional to capitalize the first letter in class names.</p>
+<p>The following lines are class properties. These are all variables that are part of the class. In other languages, these are set to public, private, or protected based on where they can be accessed. Python does not enforce this but being able to protect variables within a class is a major feature of object oriented programming, which we will discuss on the <a href="/encapsulation.html">page related to encapsulation.</a></p>
+<p>Finally, there are three incomplete functions in the class definition. These are the class methods. Generally, methods provide a way for that class to perform actions. Often you'll have methods that set and retrieve the value of the class properties. Likewise, the class might have a number of other methods, depending on what you want the class to do. For instance, if we think of the method to turn a string into upper case: <code>str.upper()</code> the method <code>upper()</code> is a method that belongs to the string object and it returns the string with all of the characters in upper case. Now let's build out our Car class a little more:</p>
+<pre><code class="python">
+class Car:
    color: str
    horn: str
    num_wheels: int
@@ -37,11 +56,11 @@ class Car():
          print(self.horn)
 </code></pre>
 </p>
-<p>Notice that by default, the color, horn, number of wheels, and so on are all variables. This means that the car class has attributes, but those attributes do not necessarily hold values. This means that each time we create a copy of this object, we can assign different attributes. How does this work? It's a little complicated but here's the process. We begin by instantiating the class:
+<p>Notice that the class has the following properties: color, horn, number of wheels, capacity, max_speed, and current_speed. Also called attributes, they are all variables that will eventually hold values. Since they are variables, any instance of the class could have different values assigned to the attributes. How does this work? We begin by instantiating the class:
 <pre><code class="python">
 my_car = Car('blue', 4, 4, 230, 'meow')
 </code></pre></p>
-<p>This will create an object that is based on the Car class. This means that the object will have all of the properties and methods defined by the car class. You'll notice that I pass a number of parameters to the Car class as I create (or "instantiate") the class. These parameters are given to the constructor. In Python the constructor method is called <code>__init__()</code>, which is a dunder as is usually included in a class. A good way to remember init is by thinking it stands for initialize. Whenever you create a new instance of a class (or make an object based on the class), the <code>__init__()</code> method is called automatically on whatever you pass in as you create the instance. So using the example of my_car above, the init method does this (**Note: you don't actually code this. It happens automatically. I'm giving you this to illustrate what's happening**):
+<p>This will create an object that is based on the Car class. This means that the object will have all of the properties and methods defined by the car class. You'll notice that I pass a number of parameters to the Car class as I create (or "instantiate") the object. These parameters are given to the constructor. In Python the constructor method is called <code>__init__()</code>. A good way to remember init is by thinking it stands for initialize. Whenever you create a new instance of a class (or make an object based on the class), the <code>__init__()</code> method is called automatically on whatever you pass in as you create the instance. So using the example of my_car above, the init method does this (**Note: you don't actually code this. It happens automatically. I'm giving you this to illustrate what's happening**):
 <pre><code class="python">
 # YOU WOULDN'T WRITE THIS. THIS IS JUST FOR ILLUSTRATION PURPOSES.
 def __init__(self, color='blue', wheels=4, capacity=4, 
@@ -133,4 +152,11 @@ class Shape:
 <p>Notice that the class has two properties. One is the number of sides. The other is the color. Technically, these properties are in the scope of the class, but not necessarily in the scope of the methods. Also notice that each of the methods has <code>self</code> as a parameter. Basically, what's happening here is you are passing the instance of the object to each of these methods so that all of its methods and properties are accessible within each method. For instance, <code>self.sides = sides</code> means that we are assigning to the sides property of this instance of the object whatever value was passed in with the local sides parameter variable. <code>self.sides</code> is not the same variable as <code>sides</code> even though the latter's value is assigned to the former. Self is the way we donote this particular instance of the object.</p> 
 
 <h3>Conclusion</h3>
-<p>This has been a really brief introduction to objects. Next we'll begin discussing inheritence, composition, and polymorphism. These concepts are where objects really begin to show their value and their usefulness.</p>
+<p>This has been a really brief introduction to objects. Next we'll begin discussing the four major principles of object oriented programming:
+<ul>
+   <li>Abstraction</li>
+   <li>Encapsulation</li>
+   <li>Inheritance</li>
+   <li>Polymorphism</li>
+</ul>
+These central concepts represent the major value and use of this programming paradigm.</p>

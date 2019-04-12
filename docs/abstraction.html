@@ -4,4 +4,79 @@ title: Abstraction
 ---
 <h1>Everyday-Coding Abstraction</h1>  
 <h2>Overview</h2>
+<p>Abstraction is a major concept in computing. The idea is that we want to make our programs abstract enough so that they handle as many cases as possible without writing new code. At the same time, we want our programs to be specific enough that they are useful. In functional programming, we make our functions abstract by giving them variable parameters, and then in the function body, we do the necessary processing to account for the possible inputs. In Object Oriented Programming, we can further extend abstraction by making our objects abstract. What does it mean to be abstract, though? Consider these pictures:
+
+<div class="row justify-content-around">
+   <div class="col col-lg-2"><img src="/img/stick_figure.png" alt="Stick figure man image." style="max-height: 300px"></div>
+   
+   <div class="col col-lg-2"><img src="/img/man.jpg" alt="Old man with wrinkled face and a big beard." style="max-height: 300px"></div>
+</div>
+
+<p>In the first picture we get a very general sense that this is a man (or even a person if the stick figure represents an un-gendered person). We could say it is abstract because it has some characteristics of a person and is generally person shaped, but it is not a specific person. The second picture has many details and is not abstract. This is a specific person, not just any person. If you want to think of abstraction in object oriented programming, you might say the first picture is the class person, and the second picture is an instance of the class person.
+</p>
+<h2>What it looks like in code.</h2>
+<p>You've already sort of seen this on the objects page, but I want to spell it out a little bit further with more examples. 
+<pre><code class="python">
+class Person:
+   first_name: str
+   last_name: str 
+   birth_year: int 
+   birth_month: int 
+   birth_day: int 
+   education_level: int 
+
+   def __init__(self, fname: str, lname: str, year: int, month: int, day: int):
+      self.first_name = fname
+      self.last_name = lname
+      self.birth_year = year
+      self.birth_month = month
+      self.birth_day = day 
+      self.education_level = 0 # Default education level is zero. We'll set this later.
+   
+   def set_name(self, fname=None, lname=None) -> boolean:
+      if not fname and not lname:
+         return False # no names given so nothing reset.
+      if fname:
+         self.first_name = fname 
+      if lname:
+         self.last_name = lname 
+      return True # something was reset.
+
+   def educate(self, levels=1) -> None:
+      # By Default, the parameter is 1. Otherwise we can increase by more.
+      self.education_level += levels 
+</code></pre>
+<p>You'll notice in the code above, a person has a few characteristics or attributes. Right now we are only defining the class, so the attributes are abstract. Likewise, there are abstract methods that can change the attributes of the object. Again, remember that the class definition (as above) is a template for creating objects. Once the class is defined, we take that abstract definition and give it concrete features. So the following code will create a specific person.</p>
+<pre><code class="python">
+dylan = Person("Dylan", "Medina", "1982", "5", "2")
+</code></pre>
+<p>The name <code>dylan</code> refers to a space in memory that holds an instance of the Person object. The attributes of this particular object look like this:
+   <table class="table">
+      <tr><th>Attribute</th><th>Value</th></tr>
+      <tr><td>first_name</td><td>"Dylan"</td></tr>
+      <tr><td>last_name</td><td>"Medina"</td></tr>
+      <tr><td>birth_year</td><td>1982</td></tr>
+      <tr><td>birth_month</td><td>5</td></tr>
+      <tr><td>birth_day</td><td>2</td></tr>
+      <tr><td>education_level</td><td>0</td></tr>
+   </table>
+You'll notice a few things. First, when I instantiated the Person class with these specific values, the constructor was called and did the appropriate work to initialize the class with the parameters above. This instance of the class--this object--was then stored in a space in memory identified with the variable name dylan. Now if I want to reference that object again, I just need to use that variable name. Second, you'll notice I used integers for the year, month, and day. Sometimes it's easier to use integers because then you can do calculations more easily. As you create objects and variables, it's useful to think of what the easiest kind of data to use will be. For instance, I could have created an age attribute, but that attribute will change over time. A birth date gives us a fixed point in time, and from there it is trivial to calculate the age. Finally, you'll notice that even though I didn't pass the constructor an education level, that attribute was set to zero. This was part of my design in the class. I could've changed that if I wanted to.  
+</p>
+<p>Using object oriented programming, I was able to take an abstract class template and create a specific object from that template. Just to belabor the point, here is a second example:</p>
+<pre><code class="python">
+matt = Person("Matthew", "Person", "1981", "5", "3")
+</code></pre>
+<p>The name <code>dylan</code> refers to a space in memory that holds an instance of the Persoobject. The attributes of this particular object look like this:
+   <table class="table">
+      <tr><th>Attribute</th><th>Value</th></tr>
+      <tr><td>first_name</td><td>"Matthew"</td></tr>
+      <tr><td>last_name</td><td>"Person"</td></tr>
+      <tr><td>birth_year</td><td>1981</td></tr>
+      <tr><td>birth_month</td><td>5</td></tr>
+      <tr><td>birth_day</td><td>3</td></tr>
+      <tr><td>education_level</td><td>0</td></tr>
+   </table>
+Once again, I have a second object that is a specific instance of the Person class. dylan and matthew have the same attributes and methods, but different values stored in those attributes.  
+</p>
+<p>A second important component of abstraction is the idea that we can create a single abstract class and then have children of that class that inherit its methods and attributes. However, we will be discussing that with the concepts of Inheritance and Polymorphism</p>
 
