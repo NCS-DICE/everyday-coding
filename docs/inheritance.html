@@ -4,3 +4,69 @@ title: Inheritance
 ---
 <h1>Everyday-Coding Inheritance</h1>  
 <h2>Overview</h2>
+<img src="/img/uml.png" alt="UML diagram representing relationship between Person and Student classes." class="float-right" style="max-height: 300px">
+<p>The next major concept in OOP is **Inheritance**, which is a way we can add new functionality to a class without repeating ourselves. (Don't forget the DRY principle--do not repeat yourself.) Inheritance is a design feature that allows us to create a new class that "inherits" the objects and properties from another class. The class that is inherited **from** is often called the parent or super class. The class that inherits is the child or sub class. One of the tools that we use to diagram inheritance is the UML diagram. Here is an example that will maybe help you visualize this concept:</p>
+
+<p>This example shows that we have a base class called Person. This class has the attributes name and age. it also has the methods to get those attributes. These attributes are part of every object that is instantiated from the Person class. This class is a super class or parent class of Student. A student is a person, but it has a few extra attributes and methods. Notice, the Student class inherits name and age (and the associated methods) from the parent class, so we don't need to repeat ourselves. It then adds to those the attributes year and gpa and methods to interact with those. This means that every Student object has the attributes name, age, year, and gpa. It has the methods get_name(), get_age(), update_gpa(), get_gpa(), and next_level(). 
+</p>
+<p>This allows us to create really general parent classes that define a really abstract objects (like "People"), but then we can create child objects that give us a bit more specificity. Understanding this concept is really crucial because much of what we're doing with Flask, especially when we create models, is extending classes, or creating child classes that inherit from parent classes that are part of the framework. More on that next week.</p>
+<p>Now let's take a look at what this looks like in code:</p>
+<h3>Person Class:</h3>
+<pre><code class="python">
+class Person:
+   name: str 
+   age: int
+
+   def __init__(self, name: str, age: int):
+      self.name = name 
+      self.age = age 
+
+   def get_name(self) -> str:
+      return self.name 
+   
+   def get_age(self) -> int:
+      return self.age 
+</code></pre>
+<h3>Student Class:</h3>
+<pre><code class="python">
+class Student(Person): # The syntax for extending a class is this.
+   year: int 
+   credits: int 
+   gpa: float 
+
+   def __init__(self, name: str, age: int):
+      Person.__init__(name, age)
+      self.credits = 0
+      self.year = 0
+      self.gpa = 0.0
+   
+   def update_gpa(self, credits: int, gpa: float):
+      self.gpa = ((self.gpa * self.credits) + gpa) / (self.credits + credits)
+   
+   def get_gpa(self) -> float:
+      return self.gpa 
+   
+   def next_level(self):
+      self.year += 1
+</code></pre>
+<p>You'll notice that the Parent class is passed to the Student class as a parameter in the class definition line. This is how inheritance is written in Python. Other languages use the keyword "extends". If you want a class to inherit from multiple classes, you can do this by passing several classes as parameters to the child class, but note, if the classes are not in the same module (or file), you'll need to import them from where they are. Also notice in the constructor we have a call to the parent's constructor (the line <code>Person.__init__(name, age)</code>. This is necessary because it populates the attributes of the parent class. If I wanted to, I could modify where the name and age parameters come from, but the key is that the parent constructor needs to be called to assign values to the inherited attributes. The Student __init__() method might also look like this:</p>
+<pre><code class="python">
+...
+   def __init__(self):
+      Person.__init__("Student", 18)
+      self.year = 0 
+      self.gpa = 0.0
+... 
+</code></pre>
+<p>If I designed the Student class in this way, I would force the name to be "Student" and the age to be 18. I'm not sure why you would do this. The point is to consider first what values need to be passed into the child class and what values need to be passed into the parent class. Then you need to consider where all of those values are coming from. One last way you can call the parent constructor is with the built-in "super" method. This would look as follows:</p>
+<pre><code class="python">
+   ...
+   def __init__(self, name: str, age: int):
+      super().__init__(name, age)
+      self.year = 0 
+      self.gpa = 0.0
+... 
+</code></pre>
+<p>Practically, there is little difference between using the class name and the super() method, except when you have multiple levels of inheritance. If you have multiple inheritance, super refers to the first of the inherited classes. One reason to use super() instead of the parent class name is that it allows you to change the parent class name or the parent class entirely without having to go through and change all of the references to it.</p>
+<h2>Conclusion</h2>
+<p>**Inheritance** is an important concept in OOP, and it will help you conform to DRY. However, it does require that you spend a bit more time planning out what you're going to build. In general, we use this a great deal when we work with frameworks because frameworks often give us a bunch of classes that we can use and extend as we develop our application. The best way to get the hang of inheritance is to play around with various toy classes. Try designing a set of classes and see how inheritance works for yourself!</p>
