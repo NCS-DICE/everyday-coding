@@ -4,3 +4,127 @@ title: Encapsulation
 ---
 <h1>Everyday-Coding Encapsulation</h1>  
 <h2>Overview</h2>
+<p>The second major concept, which is perhaps less significant in OO Python Programming is Encapsulation. Encapsulation is the design approach that allows you to "hide" or "contain" or "encapsulate" data inside of objects. This allows us to maintain some control over how our data is accessed by the program. Let's look at a quick example:</p>
+<pre><code class="python">
+balance = 750
+
+def deduct(amount):
+   global balance 
+   balance -= amount
+
+
+def deposit(amount):
+   global balance
+   balance += amount 
+
+print(balance)
+deduct(100)
+print(balance)
+deposit(10000)
+print(balance)
+balance -= 10000 #hahaha!
+</code></pre>
+<p>In the code above, I have a variable <code>balance</code> that exists in the global namespace. I can modify it with the two functions above using the global keyword, which tells the Python interpreter that this particular variable is the global one. This is all good because I've designed the functions that perform this operation, and so I have some control. I could tweak the deduct function, for instance to look like this:</p>
+<pre><code class="python">
+def deduct(amount):
+   global balance 
+   if amount > balance:
+      print("Sorry, insufficient funds.")
+   else:
+      balance -= amount 
+      print("Success!")
+</code></pre>
+<p>My design allows me to control how data is accessed and modified. However, if we look at the line in the example above <code>balance -= 10000 #hahaha</code> we can see that I can also access the global variable without a predefined function, and this is a pretty dangerous thing. This is where Encapsulation comes in. By moving attributes or data into classes, I can control who has access to this data and how they can access it. Let's look at another example, this time in C++ because it actually provides for private and public elements.</p>
+<pre><code class="c++">
+class Account {
+private:
+   string name;
+   double balance;
+   double rate;
+   static int MAX_WITHDRAWAL = 5000;
+   
+
+public:
+   Account(string name, double balance, double rate) {
+      this.name = name;
+      this.balance = balance;
+      this.rate = rate;
+   }
+
+   bool deposit(double amount) {
+      if (amount > 0) {
+         this.balance = this.balance + amount;
+         return true;
+      }
+      return false;
+   }
+
+   bool withdraw(double amount) {
+      if (amount > this.balance || amount > MAX_WITHDRAWAL) {
+         return false;
+      }
+      this.balance = this.balance - amount;
+      return true;
+   }
+};
+</code></pre>
+<p>You may not be totally familiar with the syntax, but in this class the methods and attributes are divided into two groups (private and public). Private attributes can only be accessed within the object itself. This means that if I wanted to access the balance with something like <code>account.balance</code> the compiler would fail because literally you cannot access private variables outside of the object. Instead, I'd need a public method (a getter) within the class that can return the value of the balance. I use C++ for this example because public and private states elements are enforced. A third option, if you're curious, is protected, which means that the method or attribute can be accessed within the class itself and by any children of the class that inherit from it. We'll talk about inheritance next. The most important point is that **Encapsulation** means that attributes and methods are encapsulated within the object itself and can only be accessed as the developer designed them to be accessed.</p>
+<p>Python doesn't have a mechanism to enforce private attributes or methods. Instead, we use the convention of a *single* underscore preceding a method or attribute that we want to be private. For instance, the above class written in Python would look like this:</p>
+<pre><code class="python">
+class Account:
+   _name: str 
+   _balance: float 
+   _rate: float 
+   # class constant
+   _MAX_WITHDRAWAL = 5000
+
+   def __init__(self, name: str, balance: float, rate: float):
+      self._name = name 
+      self._balance = balance 
+      self._rate = rate 
+   
+   def deposit(self, amount):
+      self._balance += amount 
+   
+   def withdraw(self, amount) -> boolean:
+      if amount > self._balance or amount > self._MAX_WITHDRAWAL:
+         return False
+      self._balance -= amount 
+      return True
+</code></pre>
+<p>You'll notice that all of the class attributes are preceded by a single underscore. This is a convention that signals that these attributes should be treated as private. Since Python doesn't enforce this, you can violate this rule and access the attributes outside of the class. For instance, you could get the value of the balance with a line like <code>account._balance</code> and that would return a value (not an error). However, it would be considered very bad form to do so. The program designer wants the class attributes to be considered private and treated as such.</p>
+<p>Just as data can be public or private, so can methods. For instance, let's say I don't want the user to be able to deposit or withdraw directly from the balance. Instead, I want them to be able to change the account, but based on their input, I control how the change occurs. Here might be an example:</p>
+<pre><code class="python">
+class Account:
+   _name: str 
+   _balance: float
+   _hold: float 
+   _rate: float 
+   # class constant
+   _MAX_WITHDRAWAL = 5000
+   _MAX_DEPOSIT = 1000
+
+   def __init__(self, name: str, balance: float, rate: float):
+      self._name = name 
+      self._balance = balance 
+      self._rate = rate 
+   
+   def _modify_balance(self, amount: float):
+      self._balance += amount
+   
+   def deposit(self, amount: float):
+      if amount > _MAX_DEPOSIT:
+         self._modify_balance(_MAX_DEPOSIT)
+         self._hold += (amount - _MAX_DEPOSIT)
+      else:
+         self._modify_balance(amount)
+   
+   def withdraw(self, amount: float) -> boolean:
+      if amount > self._balance or amount > self._MAX_WITHDRAWAL:
+         return False
+      self._modify_balance(amount) 
+      return True
+</code></pre>
+<p>What's key to notice here is that I create a private method that is called by the public methods. This allows me to exert even more control over the when the private method is called and when the balance is changed. In this example, it's a bit pointless, but hopefully you can see where it might be useful in larger applications where you want to have a bit more control over how users use your program.</p>
+<h2>Conclusion</h2>
+<p>**Encapsulation** is an OOP concept that allows us to design our programs so that data and methods are contained within a class. In our design, we can decide what we want to make public or what we want to make private. In this way we can provide some security and reliability to what we are designing.</p>

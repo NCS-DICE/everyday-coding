@@ -15,7 +15,7 @@ class TicTacToe(Game):
    def display_board(self): # Needs to display the board to look a little like a tictactoe board
 
 
-   def play_turn(self, space: int, player: str): # This is the main method to play a turn.
+   def play_turn(self): # This is the main method to play a turn.
       
       
    def reset_game(self): # This is called when the game is over and the players want to play again.
