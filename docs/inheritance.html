@@ -4,7 +4,7 @@ title: Inheritance
 ---
 <h1>Everyday-Coding Inheritance</h1>  
 <h2>Overview</h2>
-<img src="/img/uml.png" alt="UML diagram representing relationship between Person and Student classes." class="float-right" style="max-height: 300px">
+<img src="img/uml.png" alt="UML diagram representing relationship between Person and Student classes." class="float-right" style="max-height: 300px">
 <p>The next major concept in OOP is **Inheritance**, which is a way we can add new functionality to a class without repeating ourselves. (Don't forget the DRY principle--do not repeat yourself.) Inheritance is a design feature that allows us to create a new class that "inherits" the objects and properties from another class. The class that is inherited **from** is often called the parent or super class. The class that inherits is the child or sub class. One of the tools that we use to diagram inheritance is the UML diagram. Here is an example that will maybe help you visualize this concept:</p>
 
 <p>This example shows that we have a base class called Person. This class has the attributes name and age. it also has the methods to get those attributes. These attributes are part of every object that is instantiated from the Person class. This class is a super class or parent class of Student. A student is a person, but it has a few extra attributes and methods. Notice, the Student class inherits name and age (and the associated methods) from the parent class, so we don't need to repeat ourselves. It then adds to those the attributes year and gpa and methods to interact with those. This means that every Student object has the attributes name, age, year, and gpa. It has the methods get_name(), get_age(), update_gpa(), get_gpa(), and next_level(). 
