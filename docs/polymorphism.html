@@ -71,6 +71,6 @@ class DataCollectorWithPickle(DataCollector):
 <p>Notice in the above code, the DataCollectorWithPickle extends the DataCollector class. They both use the same constructor. In one case, the file is a json file and in the other it's a pickle file. Both are formats for storing data, but in the parent class, we use json to store the dictionary. In the child class the add_data is overridden to use pickle instead. Polymorphism comes from the fact that the parent and child methods have the same name, but they work differently internally. One cool trick is that even if you want to override a method, you can still call the parent method. So for instance, this works:</p>
 <pre><code class="python">
 my_datastore = DataCollectorWithPickle(jumbo.json)
-my_datastore.add_data('purple': 'people_eater')
+my_datastore.super().add_data('purple': 'people_eater')
 </code></pre>
 <p>This wouldn't break. However, we'd end up writing json to a json file. Now you'll probably use some Polymorphism in your programming at some point, but only dynamic polymorphism unless you go further into CS than we do here.</p>
