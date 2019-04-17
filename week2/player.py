@@ -37,6 +37,7 @@ class Player:
       Returns:
       bool: True if game was added. False if not.
       """
+      
       if game in self.favorite_games:
          return False 
       

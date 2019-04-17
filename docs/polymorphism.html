@@ -4,3 +4,73 @@ title: Polymorphism
 ---
 <h1>Everyday-Coding Polymorphism</h1>  
 <h2>Overview</h2>
+<p>By now you should have some sense of what **Inheritance** is. It basically means that we can create a subclass or child class that inherits methods and attributes from a parent class or super class. This allows us to avoid repeating ourselves as we write less abstract objects. However, it might be too rigid to force child classes to simply inherit behavior and attributes from parent classes. Wouldn't it be nice if we could also modify the behavior? Likewise, what if we want to write two methods that perform the same functionality on different types of data? That's just what **Polymorphism** is for. Technically, there are two types of Polymorphism: static and dynamic. Static polymorphism is not part of Python because Python is a dynamically typed language, meaning variables can hold different types of data. Dynamic polymorphism exists in dynamically typed languages in which the methods from the parent class are overridden to perform different functionality in a child class.</p>
+<h3>Static Polymorphism</h3>
+<p>For this class, you don't need to worry to much about this section, but it might be useful for you to think about in terms of the Concepts in Computing, particularly since it is a part of many of the systems of computing that we deal with in our field. Static polymorphism exists in strongly typed languages to allow methods to have the same name, but take different numbers or types of parameters. Take the following example:</p>
+<pre><code class="java">
+public class WordCounter {
+   // This first method is for rectangles
+   public HashMap<String, int> countWords(string text) {
+      String[] words = text.split("\\s+"); // Split text into array of words.
+      HashMap<String, int> map = new HashMap(); // create output data structure.
+      for(int i = 0; i < words.length; i++) { // loop through words
+         if (map.containsKey(words[i])) { // If we've already found an instance of this word, 
+            map[words[i]]++;              // Increment the count
+         } else {
+            map[words[i]] = 1;            // Otherwise add the word and counter to 1.
+         }
+      }
+      return map;
+   }
+
+   public int countWords(string text, string searchWord) {
+      String[] words = text.split("\\s+"); // Split text into array of words.
+      int count = 0;                       // Set up counter.
+      for (int i = 0; i < words.length; i++) { // Loop through words
+         if (words[i] == searchWord) {         // if the word is the search word
+            count++;                           // increment the count 
+         }
+      }
+      return count;
+   }
+}
+</code></pre>
+<p>This class is written in Java, and you'll notice that the WordCounter class has two countWords methods. One returns an integer and the other returns a hashmap (or a dictionary in Python). This is useful because when we use this class, we don't need a million differently named methods, and the compiler recognizes the two methods as separate and will select the appropriate one depending on the data that is passed to the program at runtime.</p>
+<h3>Dynamic Polymorphism</h3>
+<p>This is the type of Polymorphism that we care most about in Python. Dynamic polymorphism, to some, isn't really polymorphism, but it means that within a chain of inheritance, a child class overrides a method it inherits from its parent to provide different functionality. This is useful if you have a child class that has different properties than its parent. Take the following example:</p>
+<pre><code class="python">
+import json
+import pickle
+
+class DataCollector:
+   data_dict: dict
+   datafile: str
+   def __init__(self, data_file):
+      self.data_file = data_file
+      with open(self.data_file, 'r') as f:
+         data = json.load(f)
+      self.data_dict = dict()
+   
+   def add_data(self, **kwargs):
+      for k, v in kwargs.items: 
+         self.data_dict[k] = v 
+      with open(self.data_file, 'w') as f:
+         json.dump(self.data_dict, f)
+
+class DataCollectorWithPickle(DataCollector):
+   
+   def __init__(self, data_file):
+      super().__init__(data_file)
+
+   def add_data(self, **kwargs):
+      for k, v in kwargs.items: 
+         self.data_dict[k] = v 
+      with open(self.data_file, 'w') as f:
+         pickle.dump(self.data_dict, f, protocol=pickle.HIGHEST_PROTOCOL)
+</code></pre>
+<p>Notice in the above code, the DataCollectorWithPickle extends the DataCollector class. They both use the same constructor. In one case, the file is a json file and in the other it's a pickle file. Both are formats for storing data, but in the parent class, we use json to store the dictionary. In the child class the add_data is overridden to use pickle instead. Polymorphism comes from the fact that the parent and child methods have the same name, but they work differently internally. One cool trick is that even if you want to override a method, you can still call the parent method. So for instance, this works:</p>
+<pre><code class="python">
+my_datastore = DataCollectorWithPickle(jumbo.json)
+my_datastore.add_data('purple': 'people_eater')
+</code></pre>
+<p>This wouldn't break. However, we'd end up writing json to a json file. Now you'll probably use some Polymorphism in your programming at some point, but only dynamic polymorphism unless you go further into CS than we do here.</p>
