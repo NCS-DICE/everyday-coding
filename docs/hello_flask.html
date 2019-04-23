@@ -4,4 +4,149 @@ title: Hello Flask
 ---
 <h1>Everyday Coding--Hello Flask</h1>
 <h2>Overview</h2>
-<p>The first thing to do when you pick up a new framework is to put together an introductory application to make sure our installation worked. Now, if you're using Test Driven Development as your methodology, you'd first write a test that tests that our application works. But we're not doing that to save some time and effort in learning Python and Flask. You've gone through the process of installing Flask, you have your virtual environment activated, and you're ready to build. A basic application simple builds a Flask object that returns "Hello Flask". At this point our directory structure should look like this:</p>
+<p>The first thing to do when you pick up a new framework is to put together an introductory application to make sure our installation worked. Now, if you're using Test Driven Development as your methodology, you'd first write a test that tests that our application works. But we're not doing that to save some time and effort in learning Python and Flask. You've gone through the process of installing Flask, you have your virtual environment activated, and you're ready to build. A basic application simple builds a Flask object that returns "Hello Flask". Since we're working off of another tutorial, I'm going to not repeat that too much here. After you've gone through the first module of that tutorial, you'll have a directory that looks like such: </p>
+<pre><code class="bash">
+project
+|  venv
+|  app
+|  |  __init__.py 
+|  |  routes.py 
+|  microblog.py
+</code></pre>
+<p>First, we can see we have the root directory called project. This contains the virtual environment and all of the application code. The app directory contains all of the processes required for the app to run, and microblog.py is the main program that starts the application. Let's talk about each of the files.</p>
+<h4>__init__.py</h4>
+<p>If you recall, our classes generally have constructor methods that set up the instance of the class. That constructor method is called __init__(). Modules also have a constructor that happens to be called __init__.py. Just as the constructor is called automatically when a class is instantiated, the __init__.py script is run when we import the module. So, when we run our Flask app by running microblog.py, microblog.py imports the app directory. At that moment, the __init__.py script is run, which in turn creates an instance of the app. Let's look more closely at microblog.py</p>
+<pre><code class="python">
+# microblog.py
+from app import app
+</code></pre>
+<p>This file is only one line long. On that line, as I said, we begin by searching in app to import app. What happens here is the interpreter looks for a module called app, which exists (the directory called app is the module we're looking for). When the interpreter runs that module the __init__.py script is run automatically. That creates the app object that is imported. So from the module app, we import the object app. It's confusing now, but let's look at __init__.py</p>
+<pre><code class="python">
+# app/__init__.py
+from flask import Flask 
+
+app = Flask(__name__)
+
+from app import routes
+</code></pre>
+<p>First, we look for the flask module and from it we import the Flask class. This is the main class in Flask that we can instantiate. The next line instantiates the Flask class and stores that instance to a variable called app. This variable called app is what we imported from the app module in microblog.py. Next, notice that in instantiating Flask we pass __name__ to the constructor. This tells us, without having to read the source, that Flask's constructor takes a process name, and that process is whatever process is running to call this function. If we're using the main Python interpreter, then __name__ will probaby be "__main__", but if we're running flask with a server like gunicorn then __name__ might be "gunicorn" or "worker" or something else. The final line is another import statement. This looks in the module app (the selfsame module where __init__.py exists) for something called routes. In this case, we have a routes.py script. That is imported. That script is for processing routes that a user might access when they try to call the server. Let's look at it:</p>
+<pre><code class="python">
+# app/routes.py
+from app import app
+
+@app.route('/')
+@app.route('/index')
+def index():
+   return "Hello Flask!"
+</code></pre>
+<p>There's a bit more going on here. First, we import our application. This is necessary because it is the app that handles all of the requests from users. This is exactly the same as in microblog.py. Next, we have two decorator lines. Python uses decorators to functions. This is a little complicated, but let's discuss it. First, you should be aware that you can pass a function to a function as a prameter like so:</p>
+<pre><code class="python">
+# my_function.py
+def say_hello(func): #func is a function that we'll be passing as a parameter.
+   print("Hello!") # We do some stuff.
+   func() # Then we run the function...
+   print("Goodbye!") # then we do some more stuff.
+
+def sing_a_song():
+   print("Row row row your boat...")
+
+# now our driver:
+if __name__ == "__main__":
+   say_hello(sing_a_song)
+</code></pre>
+<p>Now let's look at what happens if we run the above set of functions:</p>
+<pre><code class="bash">
+~$ python3 my_function.py
+Hello!
+Row row row your boat...
+Goodbye
+</code></pre>
+<p>Just as we can pass a function to another function as a parameter, we can also have a function return another function or sub-function.</p>
+<pre><code class="python">
+# my_script.py 
+def wordsearch(print=False):
+   def search(word, text):
+      return text.count(word)
+
+   def printer(word, text):
+      print(text.count(word))
+   
+   if print:
+      return printer 
+   return search 
+
+if __name__ == "__main__":
+   text = "This is a string with lots of strings. Cat's like string."
+   word = "string"
+   func = wordsearch()
+   func2 = wordsearch(True)
+
+   x = func(text, word)
+   print("The result of function 1 plus 1 = {}".format(x + 1))
+   func2(text, word)
+</code></pre>
+<p>The output of the above script:</p>
+<pre><code class="bash">
+~$ python3 my_script.py
+The result of function 1 plus 1 = 4
+3
+</code></pre>
+<p>Notice, what I'm doing is I have a function that takes a parameter of True or False. If it's True, then the function returns the wrapped function that prints the results of the wordsearch directly. If the parameter is false, it returns a function that returns the results of the wordsearch to the interpreter. The next step is you can create a function that takes a function as a parameter, wraps that function with some additional functionality and then returns that newly wrapped function. This is a great way to add functionality to a function without creating a brand new function. Let's take a look:</p>
+<pre><code class="python">
+# my_script.py 
+def word_search(text, word):
+   """This function returns True if the word is in the text, 
+   or False otherwise"""
+   return word in text 
+
+def lower_case_word_search(func):
+   def wrapper(text, word):
+      text = text.lower()
+      word = word.lower()
+      return func(text, word)
+
+   return wrapper
+
+if __name__ == "__main__":
+   text = "This is a string with lots of Strings. Cat's like String."
+   word = "string"
+   print(word_search(text, word))
+   revised_search = lower_case_word_search(word_search())
+   print(revised_search(text, word))
+</code></pre>
+<p>Again, the output:</p>
+<pre><code class="bash">
+~$ python3 my_script.py 
+1
+3
+</code></pre>
+<p>If you understand this notion of passing functions as parameters, returning functions, and wrapping functions with additional functionality by passing them through functions, then decorators are pretty easy. A decorator uses the @ symbol and references a function name. Take the code in the previous example. Let's say I wanted to add the lower case functionality to my word_search for the entire scope of my program. We can use a decorator to do so.</p>
+<pre><code class="python">
+# decorator.py
+def lower_case_word_search(func):
+   def wrapper(text, word):
+      text = text.lower()
+      word = word.lower()
+      return func(text, word)
+
+   return wrapper
+
+@lower_case_word_search
+def word_search(text, word):
+   """This function returns True if the word is in the text, 
+   or False otherwise"""
+   return word in text 
+</code></pre>
+<p>The @lower_case_word_search wraps the following function (word_search()) in lower_case_word_search(). So, this example is the same as writing <code>word_search = lower_case_word_search(word_search())</code>. From here on, any time we call <code>word_search()</code> it will be wrapped in the function that makes the strings lowercase first. If this doesn't make sense, read up on decorators, and feel free to chat with the instructor. But let's get back to routes.py</p>
+<pre><code class="python">
+# app/routes.py
+from app import app
+
+@app.route('/')
+@app.route('/index')
+def index():
+   return "Hello Flask!"
+</code></pre>
+<p>We're on the two lines that begin with the @ symbol. Each line references the route method that is part of the Flask class that we instantiated in __init__.py. The parameter that's being passed to <code>route()</code> is a URL rule that defines a URL endpoint that we add some functionality to. In other words, if our app is hosted at <code>www.example.com</code> then anytime our server receives a request to <code>www.example.com</code> or <code>www.example.com/index.*</code> the index function will be called, which returns "Hello Flask!" The rest of <code>route()</code> that's wrapping the <code>index()</code> function defined here, then takes that string (Hello Flask!), and builds an HTML page and sends it back to the client that made the request.</p>
+<h3>Conclusion</h3>
+<p>I wanted to add all of this detail to the instructions because I want you to think about the Python concepts that you can learn from building a Flask app. You'll notice that we've talked about a class (Flask), we've talked about instantiating it. We've talked about importing, and we've learned about decorators and the way that we use decorators in Flask to add our own functionality (index()) to functionality that's built into the framework (app.route()).</p>
