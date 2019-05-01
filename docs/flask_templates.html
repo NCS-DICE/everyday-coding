@@ -46,7 +46,7 @@ Now imagine I had a million files exactly like that, but different content in th
 <pre><code class="html">
 &lt;html&gt;
 &lt;head&gt;
-&lt;title&gt;Blog Post {{ title }}&lt;/title&gt;
+&lt;title&gt;Blog Post &#123;&#123; title &#125;&#125;&lt;/title&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;nav&gt;
@@ -56,17 +56,17 @@ Now imagine I had a million files exactly like that, but different content in th
       &lt;li&gt;
          Posts
          &lt;ul&gt;
-            {% for t in post_titles %}
-            &lt;li&gt;{{ t }}&lt;/li&gt;
-            {% endfor %}
+            &#123;% for t in post_titles %&#125;
+            &lt;li&gt;&#123;&#123; t &#125;&#125;&lt;/li&gt;
+            &#123;% endfor %&#125;
          &lt;/ul&gt;
       &lt;/li&gt;
       &lt;li&gt;Contact&lt;/li&gt;
    &lt;/ul&gt;
 &lt;/nav&gt;
-&lt;h1&gt;Post {{ title }}&lt;/h1&gt;
-&lt;h2&gt;{{ author }}&lt;/h2&gt;
-&lt;p&gt;{{ body_content }}&lt;/p&gt;
+&lt;h1&gt;Post &#123;&#123; title &#125;&#125;&lt;/h1&gt;
+&lt;h2&gt;&#123;&#123; author &#125;&#125;&lt;/h2&gt;
+&lt;p&gt;&#123;&#123; body_content &#125;&#125;&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
