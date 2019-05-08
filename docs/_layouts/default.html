@@ -11,11 +11,11 @@
    <script type="module">
    hljs.initHighlightingOnLoad();</script>
   
-   <title>Everyday Coding -- {{ page.title }}</title>
+   <title>EC -- {{ page.title }}</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-   <a class="navbar-brand" href="https://ncs.seattleu.edu/">NCS Dice</a>
+   <a class="navbar-brand" href="https://ncs.seattleu.edu/">DTAC @ SU</a>
    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
    </button>
@@ -55,17 +55,32 @@
             </div>
          </li>
          <li class="nav-item dropdown">
-               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Week 5
-               </a>
-               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="html.html">HTML Introduction</a>
-                  <a class="dropdown-item" href="flask_templates.html">Flask Templates</a>
-               </div>
-            </li>
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               Week 5
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+               <a class="dropdown-item" href="html.html">HTML Introduction</a>
+               <a class="dropdown-item" href="flask_templates.html">Flask Templates</a>
+            </div>
+         </li>
+         <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               Week 6
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+               <a class="dropdown-item" href="databases.html">Databases</a>
+               <a class="dropdown-item" href="models.html">Flask Models</a>
+            </div>
+         </li>
       </ul>
    </div>
    </nav>
+   <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+         <h1 class="display-4">{{ page.title }}</h1>
+         <p class="lead">{{ page.slug }}</p>
+      </div>
+   </div>
    <div class="container">
       {{ content }}
    
