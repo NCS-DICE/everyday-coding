@@ -3,6 +3,9 @@ __pycache__/
 *.pyc 
 *.db
 
+migrations/
+
+
 .vscode/
 Gemfile
 Gemfile.lock
