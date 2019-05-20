@@ -3,6 +3,8 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 # For login business
 from flask_login import UserMixin
+# For hashmaking
+from hashlib import md5
 
 # Get our database, and login manager
 from app import db, login
@@ -22,7 +24,8 @@ class User(UserMixin, db.Model):
    username = db.Column(db.String(64), index=True, unique=True)
    email = db.Column(db.String(120), index=True, unique=True)
    password_hash = db.Column(db.String(128)) # notice this isn't password, but password hash. This means we hash, or encrypt our passwords.
-
+   about_me = db.Column(db.String(140))
+   last_seen = db.Column(db.DateTime, default=datetime.utcnow)
    def __repr__(self):
       """
       This tells the program how to print objects. One object will be a user. 
@@ -38,6 +41,9 @@ class User(UserMixin, db.Model):
    def check_password(self, password):
       return check_password_hash(self.password_hash, password)
 
+   def avatar(self, size):
+      digest=md5(self.email.lower().encode('utf-8')).hexdigest()
+      return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
    
 class Post(db.Model):
    """

@@ -5,7 +5,6 @@ __pycache__/
 
 migrations/
 
-
 .vscode/
 Gemfile
 Gemfile.lock
