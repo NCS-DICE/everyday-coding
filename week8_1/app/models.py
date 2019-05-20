@@ -1,16 +1,19 @@
-# Get our database
-from app import db, login
 from datetime import datetime
+# For password hashing
 from werkzeug.security import generate_password_hash, check_password_hash
+# For login business
 from flask_login import UserMixin
 
-# MODELS without classes
-followers = db.Table('followers', 
-   db.Column('follower_id', db.Integer, db.ForeignKey('user.id')), 
-   db.Column('follower_id', db.Integer, db.ForeignKey('user.id'))   
-)
+# Get our database, and login manager
+from app import db, login
 
-class User(UserMixin, db.Model): # Notice, this class now inherits from two parent classes.
+# classless functions
+#This runs the function through the user_loader method
+@login.user_loader
+def load_user(id):
+   return User.query.get(int(id))
+
+class User(UserMixin, db.Model):
    """
    This class extends the database Model, inheriting its attributes and methods.
    It will be a database model (or a table) for our users.
@@ -19,12 +22,6 @@ class User(UserMixin, db.Model): # Notice, this class now inherits from two pare
    username = db.Column(db.String(64), index=True, unique=True)
    email = db.Column(db.String(120), index=True, unique=True)
    password_hash = db.Column(db.String(128)) # notice this isn't password, but password hash. This means we hash, or encrypt our passwords.
-   followed = db.relationship(
-      'User', secondary=followers,
-      primaryjoin=(followers.c.follower_id == id),
-      secondaryjoin=(followers.c.follower_id == id),
-      backref=db.backref('followers', lazy='dynamic'), lazy='dynamic'
-   )
 
    def __repr__(self):
       """
@@ -33,31 +30,15 @@ class User(UserMixin, db.Model): # Notice, this class now inherits from two pare
       """
       return '<User {}>'.format(self.username)
 
+   # Create a hashed password
    def set_password(self, password):
-      self.password_hash = generate_password_hash(password) # Create password hash
-   
+      self.password_hash = generate_password_hash(password)
+
+   # Check password against hashed password
    def check_password(self, password):
-      return check_password_hash(self.password_hash, password) # Check that the password matches the password hash
-   
-   def follow(self, user):
-      if not self.is_following(user):
-         self.followed.append(user)
-   
-   def unfollow(self, user):
-      if self.is_following(user):
-         self.followed.remove(user)
-   
-   def is_following(self, user):
-      return self.followed.filter( 
-         followers.c.followed_id == user.id).count() > 0
+      return check_password_hash(self.password_hash, password)
 
-   def followed_posts(self):
-      followed = Posts.query.join(
-         followers, (followers.c.followed_id == Post.user_id)).filter(
-            followers.c.follower_id == self.id)
-      own = Posts.query.filter_by(user_id=self.id)
-      return followed.union(own).order_by(Post.timestamp.desc())
-
+   
 class Post(db.Model):
    """
    This class extends the database Model, inhereting its attributes and methods.
@@ -71,7 +52,3 @@ class Post(db.Model):
 
    def __repr__(self):
       return '<Post {}>'.format(self.body)
-
-
-
-
