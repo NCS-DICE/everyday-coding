@@ -87,7 +87,7 @@ def manage_users():
 @login_required
 def edit_profile(id):
    form = EditProfileForm()
-   if not id:
+   if not id and not current_user.admin:
       user = current_user
    else:
       user = User.query.filter_by(id=id).first_or_404()

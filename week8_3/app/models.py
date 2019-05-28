@@ -26,6 +26,7 @@ class User(UserMixin, db.Model):
    password_hash = db.Column(db.String(128)) # notice this isn't password, but password hash. This means we hash, or encrypt our passwords.
    about_me = db.Column(db.String(140))
    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+   admin = db.Column(db.Boolean, default=False)
    
    def __repr__(self):
       """
